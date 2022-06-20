@@ -17,7 +17,8 @@ $loader = new \Phalcon\Loader();
 $loader->registerNamespaces(
 	[
 		'CartApp\Core' => APP_PATH . '/Core/',
-		'CartApp\User' => APP_PATH . '/User/',
+        'CartApp\User' => APP_PATH . '/User/',
+        'CartApp\Offer' => APP_PATH . '/Offer/',
 	]
 );
 
