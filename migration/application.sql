@@ -21,29 +21,39 @@ CREATE TABLE IF NOT EXISTS cart_app."user"
 
 CREATE TABLE IF NOT EXISTS cart_app."offer"
 (
-    "id"        SERIAL                   NOT NULL,
-    "user_id"   SERIAL                   NOT NULL,
-    "start"     VARCHAR(255)             NOT NULL,
-    "finish"    VARCHAR(255)             NOT NULL,
-    "price"     INTEGER                  NOT NULL,
-    "space"     INTEGER                  NOT NULL,
-    "departure" timestamp with time zone NOT NULL,
-    "created"   timestamp with time zone NOT NULL,
+    id            SERIAL                   NOT NULL,
+    user_id       int                      NOT NULL,
+    start         VARCHAR(255)             NOT NULL,
+    finish        VARCHAR(255)             NOT NULL,
+    price         INTEGER                  NOT NULL,
+    space         INTEGER                  NOT NULL,
+    departure     timestamp with time zone NOT NULL,
+    created       TIMESTAMP WITH TIME ZONE,
+    created_by_id INT,
+    updated       TIMESTAMP WITH TIME ZONE,
+    updated_by_id INT,
 
-    PRIMARY KEY ("id"),
+    PRIMARY KEY (id),
+    FOREIGN KEY (created_by_id) REFERENCES cart_app."user" (id) ON UPDATE CASCADE ON DELETE SET NULL,
+    FOREIGN KEY (updated_by_id) REFERENCES cart_app."user" (id) ON UPDATE CASCADE ON DELETE SET NULL,
     FOREIGN KEY (user_id) REFERENCES cart_app."user" (id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS cart_app."order"
 (
-    "id"       SERIAL  NOT NULL,
-    "user_id"  SERIAL  NOT NULL,
-    "offer_id" SERIAL  NOT NULL,
-    "info"     INTEGER NULL,
-    "status"   BOOLEAN NOT NULL,
+    id            SERIAL  NOT NULL,
+    user_id       int     NOT NULL,
+    offer_id      int     NOT NULL,
+    info          INTEGER NULL,
+    status        BOOLEAN NOT NULL,
+    created       TIMESTAMP WITH TIME ZONE,
+    created_by_id INT,
+    updated       TIMESTAMP WITH TIME ZONE,
+    updated_by_id INT,
 
-    PRIMARY KEY ("id"),
+    PRIMARY KEY (id),
     FOREIGN KEY (user_id) REFERENCES cart_app."user" (id) ON UPDATE CASCADE ON DELETE CASCADE,
-    FOREIGN KEY (offer_id) REFERENCES cart_app."offer" (id) ON UPDATE CASCADE ON DELETE CASCADE
-
+    FOREIGN KEY (offer_id) REFERENCES cart_app."offer" (id) ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY (created_by_id) REFERENCES cart_app."user" (id) ON UPDATE CASCADE ON DELETE SET NULL,
+    FOREIGN KEY (updated_by_id) REFERENCES cart_app."user" (id) ON UPDATE CASCADE ON DELETE SET NULL
 );
