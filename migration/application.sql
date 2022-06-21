@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS cart_app."order"
     id            SERIAL  NOT NULL,
     user_id       int     NOT NULL,
     offer_id      int     NOT NULL,
-    info          INTEGER NULL,
+    info          varchar NULL,
     status        BOOLEAN NOT NULL,
     created       TIMESTAMP WITH TIME ZONE,
     created_by_id INT,

@@ -6,20 +6,21 @@ define('APP_PATH', BASE_PATH . '/app');
 
 // Preflight
 if (isset($_SERVER['HTTP_ORIGIN'])) {
-	if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
-		echo '1';
-		exit;
-	}
+    if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+        echo '1';
+        exit;
+    }
 }
 
 $loader = new \Phalcon\Loader();
 
 $loader->registerNamespaces(
-	[
-		'CartApp\Core' => APP_PATH . '/Core/',
+    [
+        'CartApp\Core' => APP_PATH . '/Core/',
         'CartApp\User' => APP_PATH . '/User/',
         'CartApp\Offer' => APP_PATH . '/Offer/',
-	]
+        'CartApp\Order' => APP_PATH . '/Order/',
+    ]
 );
 
 $loader->register();
