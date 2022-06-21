@@ -93,6 +93,7 @@ class OrderController extends AbstractController
         $request = $this->request->getJsonRawBody();
 
         $order->setStatus($request->status);
+        $order->setUpdatedBy($this->user);
 
         if (isset($request->info)) {
             $order->setInfo($request->info);

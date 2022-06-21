@@ -96,6 +96,7 @@ class OfferController extends AbstractController
         $offer->setPrice($request->price);
         $offer->setSpace($request->space);
         $offer->setDeparture($request->departure);
+        $offer->setUpdatedBy($this->user);
 
         $offer->save();
 
