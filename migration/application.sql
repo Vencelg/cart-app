@@ -10,6 +10,7 @@ CREATE TABLE IF NOT EXISTS cart_app."user"
             UNIQUE             NOT NULL,
     password      VARCHAR(255) NOT NULL,
     api_key       VARCHAR(32)  NOT NULL,
+    gender        varchar(255) NOT NULL,
     created       TIMESTAMP WITH TIME ZONE,
     created_by_id INT,
     updated       TIMESTAMP WITH TIME ZONE,
