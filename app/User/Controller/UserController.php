@@ -2,6 +2,10 @@
 
 namespace CartApp\User\Controller;
 
+use CartApp\Core\Exception\BaseException;
+use CartApp\User\Validator\CreateActionValidator;
+use CartApp\User\Validator\UpdateActionValidator;
+
 /**
  * UserController
  */
@@ -58,6 +62,18 @@ class UserController extends \CartApp\Core\Controller\AbstractController
     public function createAction(): array
     {
         $body = $this->request->getJsonRawBody();
+        $validator = new CreateActionValidator([
+            'name' => $body->name,
+            'surname' => $body->surname,
+            'email' => $body->email,
+            'password' => $body->password,
+            'gender' => $body->gender,
+        ]);
+        $validation = $validator->validate();
+
+        if ($validation['errorsSet']) {
+            throw new BaseException($validation['messages'], 422);
+        }
 
         $user = (new \CartApp\User\Model\User())
             ->setName($body->name)
@@ -85,19 +101,28 @@ class UserController extends \CartApp\Core\Controller\AbstractController
      */
     public function updateAction(int $id): array
     {
+        $body = $this->request->getJsonRawBody();
+
+        $validator = new UpdateActionValidator([
+            'name' => $body->name,
+            'surname' => $body->surname,
+            'gender' => $body->gender,
+        ]);
+
+        $validation = $validator->validate();
+        if ($validation['errorsSet']) {
+            throw new BaseException($validation['messages'], 422);
+        }
+
         $user = \CartApp\User\Model\User::findFirst($id);
         if (!($user instanceof \CartApp\User\Model\User)) {
             throw new \CartApp\Core\Exception\BaseException("User with ID: $id not found.", 404);
         }
 
-        $body = $this->request->getJsonRawBody();
-
         $user
-            ->setName($body->name)
-            ->setSurname($body->surname)
-            ->setEmail($body->email)
-            ->setPassword($body->password)
-            ->setGender($body->gender)
+            ->setName($body->name ?? $user->getName())
+            ->setSurname($body->surname ?? $user->getSurname())
+            ->setGender($body->gender ?? $user->getGender())
             ->setUpdatedBy($this->user);
 
         $user->save();
