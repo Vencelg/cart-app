@@ -14,11 +14,12 @@ class UserUnsecureController extends \CartApp\User\Controller\UserController
 	{
 	}
 
-	/**
-	 * Register (create) user from request data
-	 *
-	 * @return array
-	 */
+    /**
+     * Register (create) user from request data
+     *
+     * @return array
+     * @throws \CartApp\Core\Exception\BaseException
+     */
 	public function registerAction(): array
 	{
 		return parent::createAction();

@@ -6,6 +6,8 @@ use CartApp\Core\Controller\AbstractController;
 use CartApp\Core\Exception\BaseException;
 use CartApp\Order\Mapper\OrderMapper;
 use CartApp\Order\Model\Order;
+use CartApp\Order\Validator\CreateActionValidator;
+use CartApp\Order\Validator\UpdateActionValidator;
 use CartApp\User\Model\User;
 
 /**
@@ -54,10 +56,20 @@ class OrderController extends AbstractController
 
     /**
      * @return array
+     * @throws BaseException
      */
     public function createAction(): array
     {
         $request = $this->request->getJsonRawBody();
+        $validator = new CreateActionValidator([
+            'offer_id' => $request->offer_id,
+        ]);
+
+        $validation = $validator->validate();
+
+        if ($validation['errorsSet']) {
+            throw new BaseException($validation['messages'], 422);
+        }
 
         $order = new Order();
         $order->setOfferId($request->offer_id);
@@ -85,21 +97,26 @@ class OrderController extends AbstractController
      */
     public function updateAction(int $id): array
     {
+        $request = $this->request->getJsonRawBody();
+        $validator = new UpdateActionValidator([
+            'info' => $request->info,
+            'status' => $request->status,
+        ]);
+
+        $validation = $validator->validate();
+
+        if ($validation['errorsSet']) {
+            throw new BaseException($validation['messages'], 422);
+        }
+
         $order = Order::findFirst($id);
         if (!($order instanceof Order)) {
             throw new BaseException("Order with ID: $id not found.", 404);
         }
 
-        $request = $this->request->getJsonRawBody();
-
-        $order->setStatus($request->status);
+        $order->setStatus($request->status ?? $order->isStatus());
+        $order->setInfo($request->info ?? $order->getInfo());
         $order->setUpdatedBy($this->user);
-
-        if (isset($request->info)) {
-            $order->setInfo($request->info);
-        } else {
-            $order->setInfo(null);
-        }
 
         $order->save();
 

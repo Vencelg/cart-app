@@ -3,7 +3,9 @@
 namespace CartApp\Core\Validator;
 
 /**
- *
+ * PHALCON ACTION VALIDATOR
+ * MADE BY: Václav Gazda
+ * https://github.com/Vencelg
  */
 abstract class AbstractValidator
 {

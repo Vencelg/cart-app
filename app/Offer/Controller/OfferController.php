@@ -6,6 +6,8 @@ use CartApp\Core\Controller\AbstractController;
 use CartApp\Core\Exception\BaseException;
 use CartApp\Offer\Mapper\OfferMapper;
 use CartApp\Offer\Model\Offer;
+use CartApp\Offer\Validator\CreateActionValidator;
+use CartApp\Offer\Validator\UpdateActionValidator;
 use CartApp\User\Model\User;
 
 /**
@@ -53,10 +55,24 @@ class OfferController extends AbstractController
 
     /**
      * @return array
+     * @throws BaseException
      */
     public function createAction(): array
     {
         $request = $this->request->getJsonRawBody();
+        $validator = new CreateActionValidator([
+            'start' => $request->start,
+            'finish' => $request->finish,
+            'price' => $request->price,
+            'space' => $request->space,
+            'departure' => $request->departure,
+        ]);
+
+        $validation = $validator->validate();
+
+        if ($validation['errorsSet']) {
+            throw new BaseException($validation['messages'], 422);
+        }
 
         $newOffer = new Offer();
         $newOffer->setStart($request->start);
@@ -64,8 +80,6 @@ class OfferController extends AbstractController
         $newOffer->setPrice($request->price);
         $newOffer->setSpace($request->space);
         $newOffer->setDeparture($request->departure);
-
-
 
         if ($this->user instanceof User) {
             $newOffer->setUserId($this->user->getId());
@@ -84,18 +98,31 @@ class OfferController extends AbstractController
      */
     public function updateAction(int $id): array
     {
+        $request = $this->request->getJsonRawBody();
+        $validator = new UpdateActionValidator([
+            'start' => $request->start,
+            'finish' => $request->finish,
+            'price' => $request->price,
+            'space' => $request->space,
+            'departure' => $request->departure,
+        ]);
+
+        $validation = $validator->validate();
+
+        if ($validation['errorsSet']) {
+            throw new BaseException($validation['messages'], 422);
+        }
+
         $offer = Offer::findFirst($id);
         if (!($offer instanceof Offer)) {
             throw new \CartApp\Core\Exception\BaseException("Offer with ID: $id not found.", 404);
         }
 
-        $request = $this->request->getJsonRawBody();
-
-        $offer->setStart($request->start);
-        $offer->setFinish($request->finish);
-        $offer->setPrice($request->price);
-        $offer->setSpace($request->space);
-        $offer->setDeparture($request->departure);
+        $offer->setStart($request->start ?? $offer->getStart());
+        $offer->setFinish($request->finish ?? $offer->getFinish());
+        $offer->setPrice($request->price ?? $offer->getPrice());
+        $offer->setSpace($request->space ?? $offer->getSpace());
+        $offer->setDeparture($request->departure ?? $offer->getDeparture());
         $offer->setUpdatedBy($this->user);
 
         $offer->save();
