@@ -56,6 +56,7 @@ class OrderController extends AbstractController
 
     /**
      * @return array
+     * @throws BaseException
      */
     public function createAction(): array
     {
