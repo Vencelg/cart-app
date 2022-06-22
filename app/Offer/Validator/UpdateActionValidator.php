@@ -10,7 +10,11 @@ class UpdateActionValidator extends AbstractValidator
     public function rules(): array
     {
         return [
-
+            'start' => 'string',
+            'finish' => 'string',
+            'price' => 'integer',
+            'space' => 'integer',
+            'departure' => 'string'
         ];
     }
 }
