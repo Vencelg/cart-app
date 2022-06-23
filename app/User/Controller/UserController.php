@@ -24,7 +24,23 @@ class UserController extends \CartApp\Core\Controller\AbstractController
     }
 
     /**
-     * Return mapped collection of all users
+     * Return mapped user by given apiKey
+     *
+     * @return array
+     */
+    public function userAction(): array
+    {
+        $headers = $this->request->getHeaders();
+        $apiKey = explode(" ", $headers['Authorization']);
+        $apiKey = $apiKey[1];
+
+        $user = \CartApp\User\Model\User::findByApiKey($apiKey);
+
+        return $this->mapper->map($user);
+    }
+
+    /**
+     * Return mapped user by given apiKey
      *
      * @return array
      */
@@ -68,6 +84,7 @@ class UserController extends \CartApp\Core\Controller\AbstractController
             'email' => $body->email,
             'password' => $body->password,
             'gender' => $body->gender,
+            'age' => $body->age,
         ]);
         $validation = $validator->validate();
 
@@ -80,7 +97,9 @@ class UserController extends \CartApp\Core\Controller\AbstractController
             ->setSurname($body->surname)
             ->setEmail($body->email)
             ->setPassword($body->password)
-            ->setGender($body->gender);
+            ->setGender($body->gender)
+            ->setAge($body->age)
+            ->setProfilePicture(null);
 
         if ($this->user instanceof \CartApp\User\Model\User) {
             $user->setCreatedBy($this->user);
@@ -107,6 +126,8 @@ class UserController extends \CartApp\Core\Controller\AbstractController
             'name' => $body->name,
             'surname' => $body->surname,
             'gender' => $body->gender,
+            'age' => $body->age,
+            'profile_picture' => $body->profile_picture
         ]);
 
         $validation = $validator->validate();
@@ -123,6 +144,8 @@ class UserController extends \CartApp\Core\Controller\AbstractController
             ->setName($body->name ?? $user->getName())
             ->setSurname($body->surname ?? $user->getSurname())
             ->setGender($body->gender ?? $user->getGender())
+            ->setAge($body->age ?? $user->getAge())
+            ->setProfilePicture($body->profile_picture ?? $user->getProfilePicture())
             ->setUpdatedBy($this->user);
 
         $user->save();

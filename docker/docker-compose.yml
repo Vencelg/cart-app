@@ -30,7 +30,9 @@ services:
       local:
 
   backend:
-    image: lukas3k11/simple-messenger-backend:devel
+    build:
+      context: ..
+      dockerfile: ./Dockerfile-devel
     restart: "unless-stopped"
     ports:
       - "31000:80"
@@ -40,11 +42,11 @@ services:
     environment:
       - TZ=UTC
     volumes:
-      - ./../app:/var/www/app:rw
-      - ./../public:/var/www/public:rw
-      - ./../vendor:/var/www/vendor:rw
-      - ./../composer.json:/var/www/composer.json:rw
-      - ./../composer.lock:/var/www/composer.lock:rw
+      - ${PWD}/app:/var/www/app:rw
+      - ${PWD}/public:/var/www/public:rw
+      - ${PWD}/vendor:/var/www/vendor
+      - ${PWD}/composer.json:/var/www/composer.json:rw
+      - ${PWD}/composer.lock:/var/www/composer.lock:rw
     depends_on:
       - postgres
       - emqx

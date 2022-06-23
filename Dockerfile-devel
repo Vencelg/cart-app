@@ -7,3 +7,5 @@ RUN pecl install xdebug && \
 	echo 'xdebug.client_host=host.docker.internal' >> /usr/local/etc/php/php.ini && \
 	echo 'xdebug.client_port=9000' >> /usr/local/etc/php/php.ini && \
 	echo 'xdebug.start_with_request=yes' >> /usr/local/etc/php/php.ini
+
+RUN chown -R www-data:www-data /var/www/public
