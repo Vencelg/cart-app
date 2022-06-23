@@ -31,6 +31,54 @@ class User extends \CartApp\Core\Model\AbstractModel
     protected string $gender;
 
     /**
+     * @var int
+     */
+    protected int $age;
+
+    /**
+     * @return int
+     */
+    public function getAge(): int
+    {
+        return $this->age;
+    }
+
+    /**
+     * @param int $age
+     * @return User
+     */
+    public function setAge(int $age): self
+    {
+        $this->age = $age;
+
+        return $this;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getProfilePicture(): ?string
+    {
+        return $this->profile_picture;
+    }
+
+    /**
+     * @param null|string $profile_picture
+     * @return User
+     */
+    public function setProfilePicture(?string $profile_picture): self
+    {
+        $this->profile_picture = $profile_picture;
+
+        return $this;
+    }
+
+    /**
+     * @var null|string
+     */
+    protected ?string $profile_picture;
+
+    /**
      * @return string
      */
     public function getGender(): string
@@ -40,6 +88,7 @@ class User extends \CartApp\Core\Model\AbstractModel
 
     /**
      * @param string $gender
+     * @return User
      */
     public function setGender(string $gender): self
     {
@@ -217,7 +266,6 @@ class User extends \CartApp\Core\Model\AbstractModel
                         'surname' => 'The user surname is required',
                         'email' => 'The user email is required',
                         'password' => 'The user password is required',
-                        'gender' => 'The user gender is required',
                     ],
                 ]
             )

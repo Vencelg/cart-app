@@ -25,6 +25,8 @@ class UserMapper extends \CartApp\Core\Mapper\AbstractMapper
         $output['surname'] = $source->getSurname();
         $output['email'] = $source->getEmail();
         $output['gender'] = $source->getGender();
+        $output['age'] = $source->getAge();
+        $output['profile_picture'] = $source->getProfilePicture();
 
         if ($this->includeApiKey) {
             $output['apiKey'] = $source->getApiKey();
