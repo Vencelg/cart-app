@@ -4,6 +4,7 @@ namespace CartApp\Order\Controller;
 
 use CartApp\Core\Controller\AbstractController;
 use CartApp\Core\Exception\BaseException;
+use CartApp\Offer\Model\Offer;
 use CartApp\Order\Mapper\OrderMapper;
 use CartApp\Order\Model\Order;
 use CartApp\Order\Validator\CreateActionValidator;
@@ -73,6 +74,7 @@ class OrderController extends AbstractController
 
         $order = new Order();
         $order->setOfferId($request->offer_id);
+        $order->setOffer(Offer::findForOrder($request->offer_id));
         $order->setStatus(false);
 
         if (isset($request->info)) {
@@ -114,9 +116,15 @@ class OrderController extends AbstractController
             throw new BaseException("Order with ID: $id not found.", 404);
         }
 
+        if (isset($request->status) && !($order->isStatus())) {
+            $mqtt = $this->getDI()->getShared(\CartApp\Core\Service\MqttService::class);
+            $mqtt->publish("acceptedOrder/" . $order->getCreatedBy()->getId(), json_encode($this->mapper->map($order)));
+        }
+
         $order->setStatus($request->status ?? $order->isStatus());
         $order->setInfo($request->info ?? $order->getInfo());
         $order->setUpdatedBy($this->user);
+
 
         $order->save();
 
