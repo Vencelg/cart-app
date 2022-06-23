@@ -79,11 +79,18 @@ class Order extends AbstractModel
         $this->offer_id = $offer_id;
     }
 
+    /**
+     * @return Offer|null
+     */
     public function getOffer(): ?Offer
     {
         return $this->getRelated('offer');
     }
 
+    /**
+     * @param Offer $offer
+     * @return $this
+     */
     public function setOffer(Offer $offer): self
     {
         $this->__set('offer', $offer);
@@ -122,6 +129,9 @@ class Order extends AbstractModel
         $this->status = $status;
     }
 
+    /**
+     * @return void
+     */
     public function beforeDelete(): void
     {
         $mqtt = $this->getDI()->getShared(\CartApp\Core\Service\MqttService::class);
@@ -130,6 +140,9 @@ class Order extends AbstractModel
         ]));
     }
 
+    /**
+     * @return void
+     */
     public function afterCreate(): void
     {
         $mqtt = $this->getDI()->getShared(\CartApp\Core\Service\MqttService::class);

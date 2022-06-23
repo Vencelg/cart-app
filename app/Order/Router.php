@@ -5,9 +5,16 @@ namespace CartApp\Order\Router;
 use CartApp\Core\Application\RouterInterface;
 use Phalcon\Mvc\Router\Group;
 
+/**
+ * Router class
+ */
 class Router implements RouterInterface
 {
 
+    /**
+     * @param \Phalcon\Mvc\Router $router
+     * @return void
+     */
     public function register(\Phalcon\Mvc\Router $router)
     {
         $order = new Group([

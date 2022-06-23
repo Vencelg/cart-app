@@ -4,9 +4,15 @@ namespace CartApp\Offer\Validator;
 
 use CartApp\Core\Validator\AbstractValidator;
 
+/**
+ * UpdateActionValidator class
+ */
 class UpdateActionValidator extends AbstractValidator
 {
 
+    /**
+     * @return string[]
+     */
     public function rules(): array
     {
         return [

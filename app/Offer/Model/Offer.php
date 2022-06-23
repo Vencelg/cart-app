@@ -33,6 +33,9 @@ class Offer extends AbstractModel
      */
     protected string $departure;
 
+    /**
+     * @var int
+     */
     protected int $user_id;
 
     /**
@@ -141,6 +144,10 @@ class Offer extends AbstractModel
         $this->departure = $departure;
     }
 
+    /**
+     * @param int $id
+     * @return \Phalcon\Mvc\ModelInterface|null
+     */
     public function findForOrder(int $id)
     {
         return self::findFirst([
