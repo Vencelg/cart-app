@@ -66,6 +66,9 @@ class UserController extends \CartApp\Core\Controller\AbstractController
             throw new \CartApp\Core\Exception\BaseException("User with ID: $id not found.", 404);
         }
 
+/*        $di = $this->getDI()->getShared(\CartApp\Core\Service\MqttService::class);
+        $di->publish("user/".$id, "xadas");*/
+
         return $this->mapper->map($user);
     }
 
