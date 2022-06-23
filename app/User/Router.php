@@ -16,9 +16,14 @@ class Router implements \CartApp\Core\Application\RouterInterface
 		$user->setPrefix('/api/v1/user');
 
 		$user->addGet('', [
-			'action' => 'list',
+			'action' => 'user',
 			'controller' => 'Controller\User',
 		]);
+
+        $user->addGet('/list', [
+            'action' => 'list',
+            'controller' => 'Controller\User',
+        ]);
 
 		$user->addGet('/{id:[0-9]+}', [
 			'action' => 'get',

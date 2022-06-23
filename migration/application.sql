@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS cart_app."user"
     api_key         VARCHAR(32)  NOT NULL,
     gender          varchar(255) NOT NULL,
     age             INT          NOT NULL,
-    profile_picture varchar(255) NOT NULL,
+    profile_picture varchar(255) NULL,
     created         TIMESTAMP WITH TIME ZONE,
     created_by_id   INT,
     updated         TIMESTAMP WITH TIME ZONE,
