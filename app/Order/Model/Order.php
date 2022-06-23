@@ -3,6 +3,8 @@
 namespace CartApp\Order\Model;
 
 use CartApp\Core\Model\AbstractModel;
+use CartApp\Offer\Model\Offer;
+use CartApp\Order\Mapper\OrderMapper;
 
 /**
  * Order class
@@ -37,6 +39,12 @@ class Order extends AbstractModel
         $this->setSchema('cart_app');
         $this->setSource('order');
         $this->initCudLog();
+        $this->belongsTo(
+            'offer_id', '\CartApp\Offer\Model\Offer', 'id',
+            [
+                'alias' => 'offer'
+            ]
+        );
     }
 
     /**
@@ -71,6 +79,17 @@ class Order extends AbstractModel
         $this->offer_id = $offer_id;
     }
 
+    public function getOffer(): ?Offer
+    {
+        return $this->getRelated('offer');
+    }
+
+    public function setOffer(Offer $offer): self
+    {
+        $this->__set('offer', $offer);
+        return $this;
+    }
+
     /**
      * @return string|null
      */
@@ -101,6 +120,22 @@ class Order extends AbstractModel
     public function setStatus(bool $status): void
     {
         $this->status = $status;
+    }
+
+    public function beforeDelete(): void
+    {
+        $mqtt = $this->getDI()->getShared(\CartApp\Core\Service\MqttService::class);
+        $mqtt->publish("deletedOrder/" . $this->getCreatedBy()->getId(), json_encode([
+            'message' => 'Your ride order has been declined'
+        ]));
+    }
+
+    public function afterCreate(): void
+    {
+        $mqtt = $this->getDI()->getShared(\CartApp\Core\Service\MqttService::class);
+        $offer = Offer::find($this->getOfferId());
+        $mapper = new OrderMapper();
+        $mqtt->publish("createdOrder/" . $this->getCreatedBy()->getId(), json_encode(['order' => $mapper->map($this)]));
     }
 
     /**

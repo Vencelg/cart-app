@@ -3,6 +3,8 @@
 namespace CartApp\Order\Mapper;
 
 use CartApp\Core\Mapper\AbstractMapper;
+use CartApp\Offer\Mapper\OfferMapper;
+use CartApp\Offer\Model\Offer;
 use CartApp\Order\Model\Order;
 
 /**
@@ -30,6 +32,7 @@ class OrderMapper extends AbstractMapper
         // Prevent from infinite looping
         if ($depth <= $this->maxDepth) {
             $output = array_merge($output, $this->mapCudLog($source, ++$depth));
+            $output = array_merge($output, ['offer' => ($source->getOffer() instanceof Offer) ? (new OfferMapper())->map($source->getOffer(), $depth) : null]);
         }
 
         return $output;

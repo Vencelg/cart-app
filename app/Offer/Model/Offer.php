@@ -141,6 +141,16 @@ class Offer extends AbstractModel
         $this->departure = $departure;
     }
 
+    public function findForOrder(int $id)
+    {
+        return self::findFirst([
+            'conditions' => 'id = ?1',
+            'bind' => [
+                1 => $id,
+            ]
+        ]);
+    }
+
     /**
      * Offer validation
      *
