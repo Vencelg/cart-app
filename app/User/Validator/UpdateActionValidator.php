@@ -13,6 +13,8 @@ class UpdateActionValidator extends AbstractValidator
             'name' => 'string',
             'surname' => 'string',
             'gender' => 'string',
+            'age' => 'integer',
+            'profile_picture' => 'string'
         ];
     }
 }

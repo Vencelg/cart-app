@@ -15,6 +15,7 @@ class CreateActionValidator extends AbstractValidator
             'email' => 'required|string|email',
             'password' => 'required|string',
             'gender' => 'required|string',
+            'age' => 'required|integer'
         ];
     }
 }
