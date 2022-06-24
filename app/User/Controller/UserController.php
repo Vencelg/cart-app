@@ -30,19 +30,7 @@ class UserController extends \CartApp\Core\Controller\AbstractController
      */
     public function userAction(): array
     {
-        $headers = $this->request->getHeaders();
-        $apiKey = explode(" ", $headers['Authorization']);
-        $apiKey = $apiKey[1];
-
-        if(true) {
-            return [
-                'key' => $headers
-            ];
-        }
-
-        $user = \CartApp\User\Model\User::findByApiKey($apiKey);
-
-        return $this->mapper->map($user);
+        return $this->mapper->map($this->user);
     }
 
     /**
