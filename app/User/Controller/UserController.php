@@ -34,7 +34,7 @@ class UserController extends \CartApp\Core\Controller\AbstractController
         $apiKey = explode(" ", $headers['Authorization']);
         $apiKey = $apiKey[1];
 
-        if(!$apiKey) {
+        if(true) {
             return [
                 'key' => $apiKey
             ];
