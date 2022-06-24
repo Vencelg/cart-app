@@ -36,7 +36,7 @@ class UserController extends \CartApp\Core\Controller\AbstractController
 
         if(true) {
             return [
-                'key' => $apiKey
+                'key' => $headers
             ];
         }
 
